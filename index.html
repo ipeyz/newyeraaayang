@@ -5,39 +5,142 @@
 <title>Happy New Year, Sayang</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-/* Basic reset */
-* { margin:0; padding:0; box-sizing:border-box; }
-
 html, body {
-  height:100%;
-  font-family:'Poppins', sans-serif;
-  background:black;
-  overflow:hidden;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: black;
+  overflow: hidden;
 }
 
 /* Fireworks canvas */
 canvas {
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Overlay container */
+.overlay {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* Scrollable card */
+.card {
+  max-width: 900px;
+  width: 90%;
+  height: 80vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-right: 10px;
+}
+
+/* Floating bubbles container */
+.bubble-container {
+  position: absolute;
   top:0;
   left:0;
   width:100%;
   height:100%;
-  z-index:0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index:1;
 }
 
-/* Overlay to click to start */
+/* Bubble style */
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  padding: 20px;
+  min-width: 60px;
+  min-height: 60px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  color: white;
+  background: linear-gradient(45deg, #ff6ec7, #ffb3c1, #ff1493);
+  box-shadow: 0 0 15px rgba(255,105,180,0.7);
+  backdrop-filter: blur(5px);
+  opacity: 0.8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: floatUp linear infinite;
+}
+
+/* Bubble animation */
+@keyframes floatUp {
+  0% { transform: translateY(100vh) scale(0.8); opacity:0.7; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-100px) scale(1); opacity:0; }
+}
+
+/* Picture bubble */
+.bubble-image {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  z-index:2;
+}
+
+.bubble-image img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 4px solid rgba(255,182,193,0.5);
+  box-shadow: 0 0 30px rgba(255,105,180,0.8);
+  animation: floatImage 6s ease-in-out infinite alternate;
+  object-fit: cover;
+}
+
+@keyframes floatImage {
+  0% { transform: translateY(0px);}
+  50% { transform: translateY(-15px);}
+  100% { transform: translateY(0px);}
+}
+
+/* Paragraph bubble */
+.paragraph-bubble {
+  background: rgba(255,182,193,0.2);
+  border-radius: 30px;
+  padding: 20px;
+  color: white;
+  backdrop-filter: blur(5px);
+  font-size: 1rem;
+  line-height: 1.6;
+  box-shadow: 0 0 25px rgba(255,105,180,0.8);
+  animation: floatBubble 6s ease-in-out infinite alternate;
+  overflow-y:auto;
+}
+
+/* Overlay start */
 #startOverlay {
   position: fixed;
-  top:0; left:0;
-  width:100%; height:100%;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
   background: rgba(0,0,0,0.9);
-  display:flex;
+  display: flex;
   justify-content:center;
   align-items:center;
   z-index:10;
   cursor:pointer;
   text-align:center;
-  flex-direction: column;
+  padding:20px;
 }
 
 #overlayText {
@@ -50,9 +153,11 @@ canvas {
   animation: bounce 1.5s infinite alternate;
 }
 
+/* Ribbon */
 #ribbon {
   position: fixed;
-  top:20px; right:-40px;
+  top:20px;
+  right:-40px;
   background:#ff69b4;
   color:white;
   padding:10px 60px;
@@ -64,103 +169,50 @@ canvas {
 }
 
 @keyframes bounce {
-  0% { transform: translateY(0); }
+  0% { transform: translateY(0px); }
   100% { transform: translateY(-15px); }
 }
 
-/* Main overlay with content */
-.overlay {
-  position: relative;
-  z-index:2;
-  height:100vh;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:10px;
+@keyframes floatBubble {
+  0% { transform: translateY(0px);}
+  50% { transform: translateY(-10px);}
+  100% { transform: translateY(0px);}
 }
 
-.card {
-  width:90%;
-  max-width:900px;
-  height:80vh;
-  overflow-y:auto;
-  background: rgba(0,0,0,0.4);
-  border-radius:20px;
-  padding:20px;
-  box-shadow: 0 0 40px rgba(255,105,180,0.7);
-  color:white;
-  display:flex;
-  flex-direction: column;
-  gap:20px;
-}
-
-/* Her picture */
-.bubble-image {
-  display:flex;
-  justify-content:center;
-}
-
-.bubble-image img {
-  width:180px;
-  height:180px;
-  border-radius:50%;
-  border:4px solid rgba(255,182,193,0.5);
-  box-shadow: 0 0 30px rgba(255,105,180,0.8);
-  object-fit:cover;
-  animation: floatImage 6s ease-in-out infinite alternate;
-}
-
-@keyframes floatImage {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
-  100% { transform: translateY(0); }
-}
-
-/* Paragraph style */
-.paragraph-bubble {
-  background: rgba(255,182,193,0.1);
-  border-radius:30px;
-  padding:25px;
-  font-size:1rem;
-  line-height:1.6;
-  box-shadow: 0 0 25px rgba(255,105,180,0.8);
-}
-
-/* Responsive */
 @media(max-width:600px){
-  #overlayText { font-size:2rem; }
-  #ribbon { padding:6px 40px; font-size:0.9rem; right:-30px; top:15px; }
-  .bubble-image img { width:140px; height:140px; }
-  .paragraph-bubble { font-size:0.95rem; padding:15px; }
-  .card { height:90vh; width:95%; }
+  #overlayText{font-size:2rem;}
+  #ribbon{padding:6px 40px; font-size:0.9rem; right:-30px; top:15px;}
+  .paragraph-bubble{font-size:0.9rem;padding:15px;}
+  .bubble-image img{width:140px;height:140px;}
 }
 </style>
 </head>
 <body>
 
-<!-- Fireworks -->
 <canvas id="fireworks"></canvas>
 
-<!-- Main content -->
+<!-- Floating bubbles -->
+<div class="bubble-container" id="bubbleContainer"></div>
+
 <div class="overlay">
   <div class="card">
     <div class="bubble-image">
       <img src="raisya.jpg" alt="Sayang">
     </div>
     <div class="paragraph-bubble">
-As this year comes to an end and a new one begins, I keep thinking about everything we’ve been through together and how much it all means to me, because every moment with you, sayang, has shaped my heart in ways I never expected. We didn’t just share good times, we shared growth, misunderstandings, lessons, patience, and forgiveness, and all of that made our bond stronger and more real. There were days when things weren’t easy, days when we had to learn how to understand each other better, but we never gave up, and that’s what makes this love so special to me. You’ve been there through my ups and downs, through my overthinking and my silence, through my happiness and my struggles, and knowing that you chose to stay means more to me than words can fully describe. As we step into 2026 and turn 17 together, it feels like a new chapter not just in time, but in us — a chapter filled with more dreams, more maturity, and more love. I don’t just see you as someone in my life, I see you as someone who changed my life, someone who taught me what care, trust, and real connection feel like. Loving you has taught me patience, understanding, and the importance of choosing someone even when things aren’t perfect. So as the new year begins, I wish for more memories with you, more laughter late at night, more growth side by side, and more moments where we remind each other why we started. Happy New Year, sayang — thank you for everything you are, everything you’ve been, and everything we’re still becoming. I’m grateful for you, I cherish you, and I carry my love for you into this new year and every year that comes after.
+      As this year comes to an end and a new one begins, I keep thinking about everything we’ve been through together...
+    </div>
+    <div class="paragraph-bubble">
+      As we step into 2026 and turn 17 together, it feels like a new chapter not just in time...
     </div>
   </div>
 </div>
 
-<!-- Overlay start -->
 <div id="startOverlay">
   <div id="overlayText">HAPPYYY NEW YEARR BEBEHH</div>
   <div id="ribbon">💖💖</div>
 </div>
 
-<!-- Music -->
 <audio id="bgMusic" loop>
   <source src="raisyayum.mp3" type="audio/mpeg">
 </audio>
@@ -172,7 +224,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-window.addEventListener('resize', ()=>{
+window.addEventListener('resize',()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
@@ -224,9 +276,22 @@ function animate(){
   requestAnimationFrame(animate);
 }
 
-// Overlay click to start
-const startOverlay=document.getElementById('startOverlay');
-const bgMusic=document.getElementById('bgMusic');
+// Floating bubbles
+const bubbleContainer = document.getElementById('bubbleContainer');
+function createBubble(){
+  const bubble = document.createElement('div');
+  bubble.className='bubble';
+  bubble.style.left = Math.random()*window.innerWidth+'px';
+  bubble.style.animationDuration = 10+Math.random()*10+'s';
+  bubble.innerText = '💖✨';
+  bubbleContainer.appendChild(bubble);
+  setTimeout(()=>bubble.remove(), 20000);
+}
+setInterval(createBubble, 500);
+
+// Start overlay
+const startOverlay = document.getElementById('startOverlay');
+const bgMusic = document.getElementById('bgMusic');
 
 startOverlay.addEventListener('click', ()=>{
   bgMusic.play();
@@ -237,3 +302,4 @@ startOverlay.addEventListener('click', ()=>{
 
 </body>
 </html>
+
