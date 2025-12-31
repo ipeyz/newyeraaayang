@@ -1,134 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Happy New Year, Sayang</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Poppins', sans-serif;
-      background: black;
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
+<meta charset="UTF-8">
+<title>Happy New Year, Sayang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: black;
+  overflow: hidden; /* disable body scroll */
+}
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
 
-    .overlay {
-      position: relative;
-      z-index: 2;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      text-align: center;
-      flex-direction: column;
-    }
+.overlay {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  flex-direction: column;
+}
 
-    .card {
-      background: rgba(255, 182, 193, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 900px;
-      width: 90%;
-      color: #ffe6f0;
-      box-shadow: 0 0 40px rgba(255, 105, 180, 0.5);
-      margin-bottom: 50px;
-      z-index: 2;
-      position: relative;
-    }
+.card {
+  max-width: 900px;
+  width: 90%;
+  height: 80vh; /* fixed height */
+  overflow-y: auto; /* scroll only inside text container */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-right: 10px; /* space for scrollbar */
+}
 
-    h1 {
-      font-size: 2.5rem;
-      color: #ff69b4;
-      margin-bottom: 15px;
-    }
+/* Bubble style for paragraph */
+.bubble {
+  background: rgba(255,182,193,0.2);
+  color: #ffe6f0;
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow: 0 0 15px rgba(255,105,180,0.6);
+  backdrop-filter: blur(5px);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  animation: float 6s ease-in-out infinite alternate;
+  position: relative;
+  text-align: left;
+}
 
-    p {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: #ffd6e8;
-      white-space: pre-wrap;
-      text-align: left;
-    }
+@keyframes float {
+  0% { transform: translateY(0px) rotate(-1deg);}
+  50% { transform: translateY(-10px) rotate(1deg);}
+  100% { transform: translateY(0px) rotate(-1deg);}
+}
 
-    .year {
-      margin-top: 20px;
-      font-size: 1.4rem;
-      color: #ff9acb;
-      letter-spacing: 3px;
-    }
+/* Overlay start */
+#startOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  cursor: pointer;
+  text-align: center;
+  padding: 20px;
+  overflow: hidden;
+}
 
-    /* Click-to-start overlay */
-    #startOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.9);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-      cursor: pointer;
-      text-align: center;
-      padding: 20px;
-      overflow: hidden;
-    }
+#overlayText {
+  font-size: 3rem;
+  font-weight: bold;
+  background: linear-gradient(90deg,#ff69b4,#ffb6c1,#ff1493);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 15px rgba(255,105,180,0.7);
+  animation: bounce 1.5s infinite alternate;
+  z-index: 5;
+}
 
-    #overlayText {
-      font-size: 3rem;
-      font-weight: bold;
-      background: linear-gradient(90deg, #ff69b4, #ffb6c1, #ff1493);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 2px 2px 15px rgba(255,105,180,0.7);
-      animation: bounce 1.5s infinite alternate;
-      position: relative;
-      z-index: 5;
-      text-align: center;
-    }
+@keyframes bounce {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-15px); }
+}
 
-    @keyframes bounce {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(-15px); }
-    }
+/* Ribbon corner */
+#ribbon {
+  position: fixed;
+  top: 20px;
+  right: -40px;
+  background: #ff69b4;
+  color: white;
+  padding: 10px 60px;
+  transform: rotate(45deg);
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(255,105,180,0.7);
+  z-index: 20;
+  pointer-events: none;
+}
 
-    /* Ribbon corner */
-    #ribbon {
-      position: fixed;
-      top: 20px;
-      right: -40px;
-      background: #ff69b4;
-      color: white;
-      padding: 10px 60px;
-      transform: rotate(45deg);
-      font-weight: bold;
-      box-shadow: 0 0 10px rgba(255,105,180,0.7);
-      z-index: 20;
-      pointer-events: none; /* click goes through ribbon */
-    }
-
-    @media (max-width: 600px) {
-      h1 { font-size: 2rem; }
-      p { font-size: 1rem; }
-      #overlayText { font-size: 2rem; }
-      #ribbon { padding: 6px 40px; font-size: 0.9rem; right: -30px; top: 15px; }
-    }
-  </style>
+@media(max-width:600px){
+  #overlayText { font-size: 2rem; }
+  #ribbon { padding: 6px 40px; font-size: 0.9rem; right:-30px; top:15px; }
+  .bubble { font-size: 1rem; padding: 15px; }
+}
+</style>
 </head>
 <body>
 
@@ -136,126 +128,120 @@
 
 <div class="overlay">
   <div class="card">
-    <h1>Happy New Year, Sayang</h1>
-
-    <p>
+    <div class="bubble">
 As this year comes to an end and a new one begins, I keep thinking about everything we’ve been through together and how much it all means to me, because every moment with you, sayang, has shaped my heart in ways I never expected. We didn’t just share good times, we shared growth, misunderstandings, lessons, patience, and forgiveness, and all of that made our bond stronger and more real. There were days when things weren’t easy, days when we had to learn how to understand each other better, but we never gave up, and that’s what makes this love so special to me. You’ve been there through my ups and downs, through my overthinking and my silence, through my happiness and my struggles, and knowing that you chose to stay means more to me than words can fully describe.
-
+    </div>
+    <div class="bubble">
 As we step into 2026 and turn 17 together, it feels like a new chapter not just in time, but in us  a chapter filled with more dreams, more maturity, and more love. I don’t just see you as someone in my life, I see you as someone who changed my life, someone who taught me what care, trust, and real connection feel like. Loving you has taught me patience, understanding, and the importance of choosing someone even when things aren’t perfect. So as the new year begins, I wish for more memories with you, more laughter late at night, more growth side by side, and more moments where we remind each other why we started. Happy New Year, sayang  thank you for everything you are, everything you’ve been, and everything we’re still becoming. I’m grateful for you, I cherish you, and I carry my love for you into this new year and every year that comes after.
-    </p>
-
-    <div class="year">2026</div>
+    </div>
   </div>
 </div>
 
-<!-- Click-to-start overlay -->
 <div id="startOverlay">
   <div id="overlayText">HAPPYYY NEW YEARR BEBEHH</div>
   <div id="ribbon">💖💖</div>
 </div>
 
-<!-- Audio -->
 <audio id="bgMusic" loop>
   <source src="raisyayum.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
 
 <script>
-  // Fireworks
-  const canvas = document.getElementById('fireworks');
-  const ctx = canvas.getContext('2d');
+// Fireworks code
+const canvas = document.getElementById('fireworks');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.addEventListener('resize',()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+});
 
-  window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  });
-
-  class Firework {
-    constructor() {
-      this.x = Math.random() * canvas.width;
-      this.y = canvas.height;
-      this.targetY = Math.random() * canvas.height / 2;
-      this.speed = 4 + Math.random() * 2;
-      this.exploded = false;
-      this.particles = [];
-      this.color = `hsl(${330 + Math.random() * 20}, 100%, 70%)`;
-    }
-    update() {
-      if (!this.exploded) {
-        this.y -= this.speed;
-        if (this.y <= this.targetY) {
-          this.explode();
-          this.exploded = true;
-        }
-      } else {
-        this.particles.forEach(p => p.update());
+class Firework{
+  constructor(){
+    this.x = Math.random()*canvas.width;
+    this.y = canvas.height;
+    this.targetY = Math.random()*canvas.height/2;
+    this.speed = 4+Math.random()*2;
+    this.exploded=false;
+    this.particles=[];
+    this.color=`hsl(${330+Math.random()*20},100%,70%)`;
+  }
+  update(){
+    if(!this.exploded){
+      this.y -= this.speed;
+      if(this.y<=this.targetY){
+        this.explode();
+        this.exploded=true;
       }
-    }
-    explode() {
-      for (let i = 0; i < 40; i++) {
-        this.particles.push(new Particle(this.x, this.y, this.color));
-      }
-    }
-    draw() {
-      if (!this.exploded) {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, 3, 0, Math.PI*2);
-        ctx.fill();
-      } else {
-        this.particles.forEach(p => p.draw());
-      }
+    } else{
+      this.particles.forEach(p=>p.update());
     }
   }
-
-  class Particle {
-    constructor(x, y, color) {
-      this.x = x;
-      this.y = y;
-      this.speedX = (Math.random()-0.5)*6;
-      this.speedY = (Math.random()-0.5)*6;
-      this.life = 100;
-      this.color = color;
+  explode(){
+    for(let i=0;i<40;i++){
+      this.particles.push(new Particle(this.x,this.y,this.color));
     }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.life--;
-    }
-    draw() {
-      ctx.fillStyle = this.color;
-      ctx.globalAlpha = this.life/100;
+  }
+  draw(){
+    if(!this.exploded){
+      ctx.fillStyle=this.color;
       ctx.beginPath();
-      ctx.arc(this.x, this.y, 2, 0, Math.PI*2);
+      ctx.arc(this.x,this.y,3,0,Math.PI*2);
       ctx.fill();
-      ctx.globalAlpha = 1;
+    } else{
+      this.particles.forEach(p=>p.draw());
     }
   }
+}
 
-  const fireworks = [];
-  function animate() {
-    ctx.fillStyle = 'rgba(0,0,0,0.2)';
-    ctx.fillRect(0,0,canvas.width, canvas.height);
-    if (Math.random() < 0.05) fireworks.push(new Firework());
-    fireworks.forEach((fw, idx) => {
-      fw.update();
-      fw.draw();
-      if (fw.exploded && fw.particles.every(p=>p.life<=0)) fireworks.splice(idx,1);
-    });
-    requestAnimationFrame(animate);
+class Particle{
+  constructor(x,y,color){
+    this.x=x;
+    this.y=y;
+    this.speedX=(Math.random()-0.5)*6;
+    this.speedY=(Math.random()-0.5)*6;
+    this.life=100;
+    this.color=color;
   }
+  update(){
+    this.x+=this.speedX;
+    this.y+=this.speedY;
+    this.life--;
+  }
+  draw(){
+    ctx.fillStyle=this.color;
+    ctx.globalAlpha=this.life/100;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,2,0,Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha=1;
+  }
+}
 
-  // Start overlay click
-  const startOverlay = document.getElementById('startOverlay');
-  const bgMusic = document.getElementById('bgMusic');
-
-  startOverlay.addEventListener('click', () => {
-    bgMusic.play();
-    startOverlay.style.display = 'none';
-    animate();
+const fireworks=[];
+function animate(){
+  ctx.fillStyle='rgba(0,0,0,0.2)';
+  ctx.fillRect(0,0,canvas.width, canvas.height);
+  if(Math.random()<0.05) fireworks.push(new Firework());
+  fireworks.forEach((fw,idx)=>{
+    fw.update();
+    fw.draw();
+    if(fw.exploded && fw.particles.every(p=>p.life<=0)) fireworks.splice(idx,1);
   });
+  requestAnimationFrame(animate);
+}
+
+const startOverlay=document.getElementById('startOverlay');
+const bgMusic=document.getElementById('bgMusic');
+
+startOverlay.addEventListener('click',()=>{
+  bgMusic.play();
+  startOverlay.style.display='none';
+  animate();
+});
 </script>
 
 </body>
