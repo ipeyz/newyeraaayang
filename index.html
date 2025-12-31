@@ -33,7 +33,7 @@ canvas {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 20px;
+  padding: 10px;
 }
 
 /* Scrollable card */
@@ -45,7 +45,7 @@ canvas {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-right: 10px;
+  padding: 10px;
 }
 
 /* Floating bubbles container */
@@ -71,10 +71,9 @@ canvas {
   font-weight: bold;
   font-size: 1rem;
   color: white;
-  background: linear-gradient(45deg, #ff6ec7, #ffb3c1, #ff1493);
-  box-shadow: 0 0 15px rgba(255,105,180,0.7);
-  backdrop-filter: blur(5px);
-  opacity: 0.8;
+  background: linear-gradient(45deg, #ff69b4, #ff1493, #ffb6c1);
+  box-shadow: 0 0 25px rgba(255,105,180,0.9);
+  opacity: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -114,16 +113,15 @@ canvas {
 
 /* Paragraph bubble */
 .paragraph-bubble {
-  background: rgba(255,182,193,0.2);
+  background: linear-gradient(135deg, #ff69b4, #ff1493, #ffb6c1);
   border-radius: 30px;
   padding: 20px;
   color: white;
-  backdrop-filter: blur(5px);
   font-size: 1rem;
   line-height: 1.6;
-  box-shadow: 0 0 25px rgba(255,105,180,0.8);
-  animation: floatBubble 6s ease-in-out infinite alternate;
+  box-shadow: 0 0 35px rgba(255,105,180,0.9);
   overflow-y:auto;
+  max-height: 60vh;
 }
 
 /* Overlay start */
@@ -173,17 +171,12 @@ canvas {
   100% { transform: translateY(-15px); }
 }
 
-@keyframes floatBubble {
-  0% { transform: translateY(0px);}
-  50% { transform: translateY(-10px);}
-  100% { transform: translateY(0px);}
-}
-
 @media(max-width:600px){
   #overlayText{font-size:2rem;}
   #ribbon{padding:6px 40px; font-size:0.9rem; right:-30px; top:15px;}
-  .paragraph-bubble{font-size:0.9rem;padding:15px;}
+  .paragraph-bubble{font-size:0.95rem;padding:15px; max-height: 50vh;}
   .bubble-image img{width:140px;height:140px;}
+  .card{width:95%; height:90vh;}
 }
 </style>
 </head>
@@ -200,10 +193,10 @@ canvas {
       <img src="raisya.jpg" alt="Sayang">
     </div>
     <div class="paragraph-bubble">
-      As this year comes to an end and a new one begins, I keep thinking about everything we’ve been through together...
+As this year comes to an end and a new one begins, I keep thinking about everything we’ve been through together and how much it all means to me, because every moment with you, sayang, has shaped my heart in ways I never expected. We didn’t just share good times, we shared growth, misunderstandings, lessons, patience, and forgiveness, and all of that made our bond stronger and more real. There were days when things weren’t easy, days when we had to learn how to understand each other better, but we never gave up, and that’s what makes this love so special to me. You’ve been there through my ups and downs, through my overthinking and my silence, through my happiness and my struggles, and knowing that you chose to stay means more to me than words can fully describe.
     </div>
     <div class="paragraph-bubble">
-      As we step into 2026 and turn 17 together, it feels like a new chapter not just in time...
+As we step into 2026 and turn 17 together, it feels like a new chapter not just in time, but in us  a chapter filled with more dreams, more maturity, and more love. I don’t just see you as someone in my life, I see you as someone who changed my life, someone who taught me what care, trust, and real connection feel like. Loving you has taught me patience, understanding, and the importance of choosing someone even when things aren’t perfect. So as the new year begins, I wish for more memories with you, more laughter late at night, more growth side by side, and more moments where we remind each other why we started. Happy New Year, sayang  thank you for everything you are, everything you’ve been, and everything we’re still becoming. I’m grateful for you, I cherish you, and I carry my love for you into this new year and every year that comes after.
     </div>
   </div>
 </div>
@@ -224,7 +217,7 @@ const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-window.addEventListener('resize',()=>{
+window.addEventListener('resize', ()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
@@ -278,20 +271,25 @@ function animate(){
 
 // Floating bubbles
 const bubbleContainer = document.getElementById('bubbleContainer');
+let maxBubbles = 10;
+
 function createBubble(){
+  const currentBubbles = bubbleContainer.children.length;
+  if(currentBubbles >= maxBubbles) return;
+
   const bubble = document.createElement('div');
   bubble.className='bubble';
-  bubble.style.left = Math.random()*window.innerWidth+'px';
-  bubble.style.animationDuration = 10+Math.random()*10+'s';
+  bubble.style.left = Math.random() * (window.innerWidth - 80) + 'px';
+  bubble.style.animationDuration = 12 + Math.random() * 8 + 's';
   bubble.innerText = '💖✨';
   bubbleContainer.appendChild(bubble);
   setTimeout(()=>bubble.remove(), 20000);
 }
-setInterval(createBubble, 500);
+setInterval(createBubble, 1000);
 
-// Start overlay
-const startOverlay = document.getElementById('startOverlay');
-const bgMusic = document.getElementById('bgMusic');
+// Overlay click to start
+const startOverlay=document.getElementById('startOverlay');
+const bgMusic=document.getElementById('bgMusic');
 
 startOverlay.addEventListener('click', ()=>{
   bgMusic.play();
